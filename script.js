@@ -80,7 +80,7 @@ getCountryAndNeighbour('colombia');
 */
 
 //
-
+/*
 const getJSON = function(url, errorMsg = 'Something went wrong') {
     return fetch(url).then(response =>  {
         if(!response.ok)
@@ -114,6 +114,7 @@ btn.addEventListener('click', function(){
     getCountryData('portugal');
 
 })
+*/
 
 //getCountryData('australia');
 
@@ -137,12 +138,12 @@ const whereAmI = function (lat, lng){
 // https://geocode.xyz/51.50354,-0.12768?geoit=json
 // https://geocode.xyz/51.50354,-0.12768?geoit=json
 
-whereAmI(51.50354, -0.12768);
+// whereAmI(51.50354, -0.12768);
 
-//whereAmI(52.508, 13.381);
-whereAmI(52.508, 13.381);
-whereAmI(19.037, 72.873);
-whereAmI(-33.933, 18.474);
+// whereAmI(52.508, 13.381);
+// whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933, 18.474);
 
 
 //getCountryData(whereAmI(52.508, 13.381));
@@ -154,11 +155,60 @@ whereAmI(-33.933, 18.474);
 
 // Callback queue starvation example
 
-console.log('Test start')
-setTimeout(() => console.log('0 sec timer'), 0);
-Promise.resolve('Resolverd promise 1').then(res => console.log(res));
-Promise.resolve('Resolved promise 2').then(res => {
-    for (let i =1; i< 1000000000000; i++) {}
-    console.log(res);
+// console.log('Test start')
+// setTimeout(() => console.log('0 sec timer'), 0);
+// Promise.resolve('Resolverd promise 1').then(res => console.log(res));
+// Promise.resolve('Resolved promise 2').then(res => {
+//     for (let i =1; i< 1000000000000; i++) {}
+//     console.log(res);
+// })
+// console.log('Test end')
+
+////////////////////////////////////////
+
+
+const lotteryPromise = new Promise(function(resolve, reject) {
+    console.log('Lotter draw is happening WoW')
+    setTimeout(function() {
+        if(Math.random() >= 0.5) {
+            resolve('You WINN $$$');
+        }else {
+            reject(new Error('You lost your money :('));
+        }
+    }, 2000)
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
+
+const wait = function(seconds) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, seconds * 1000);
+    })
+}
+
+// Replacement for callback hell
+wait(1)
+    .then(() => {
+    console.log('I waited for 1 seconds');
+    return wait(1);
 })
-console.log('Test end')
+    .then(() => {
+        console.log('I waited for 2 seconds');
+        return wait(1);
+})
+    .then(() => {
+        console.log('I waited for 3 seconds');
+        return wait(1);
+})
+    .then(() => {
+        console.log('I waited for 4 seconds');
+        return wait(1);
+})
+    .then(() => {
+        console.log('I waited for 5 seconds');
+        return wait(1);
+})
+.then(() => console.log('I waited for 6 second'))
+
+Promise.resolve('abc').then(x=> console.log(x));
+Promise.reject(new Error('Problem!')).catch(x=> console.log(x));
