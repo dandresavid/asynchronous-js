@@ -147,8 +147,18 @@ whereAmI(-33.933, 18.474);
 
 //getCountryData(whereAmI(52.508, 13.381));
 
-
 // Coordinates 1: 52.508, 13.381 (Latitude, Longitude)
 // Coordinates 2: 19.037, 72.873
 // Coordinates 3: -33.933, 18.474
 // Coordinates 4: 51.50354,-0.12768
+
+// Callback queue starvation example
+
+console.log('Test start')
+setTimeout(() => console.log('0 sec timer'), 0);
+Promise.resolve('Resolverd promise 1').then(res => console.log(res));
+Promise.resolve('Resolved promise 2').then(res => {
+    for (let i =1; i< 1000000000000; i++) {}
+    console.log(res);
+})
+console.log('Test end')
