@@ -115,5 +115,40 @@ btn.addEventListener('click', function(){
 
 })
 
-getCountryData('australia');
+//getCountryData('australia');
 
+// Challenge # 1
+
+const whereAmI = function (lat, lng){
+    const prom = fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then (response => {
+        if(!response.ok)
+            throw new Error(`Error (${response.status}) you cann't call the API more than 3 times per second`);
+        return response.json()
+    })
+    .then(data => {
+        console.log(`You are in ${data.city} ,${data.country}`);
+        getCountryData(data.country);
+    })
+    .catch(err => console.log(`Algo ocurrio mal: ${err}`))
+
+}
+
+// https://geocode.xyz/51.50354,-0.12768?geoit=json
+// https://geocode.xyz/51.50354,-0.12768?geoit=json
+
+whereAmI(51.50354, -0.12768);
+
+//whereAmI(52.508, 13.381);
+whereAmI(52.508, 13.381);
+whereAmI(19.037, 72.873);
+whereAmI(-33.933, 18.474);
+
+
+//getCountryData(whereAmI(52.508, 13.381));
+
+
+// Coordinates 1: 52.508, 13.381 (Latitude, Longitude)
+// Coordinates 2: 19.037, 72.873
+// Coordinates 3: -33.933, 18.474
+// Coordinates 4: 51.50354,-0.12768
