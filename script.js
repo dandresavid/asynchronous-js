@@ -7,7 +7,7 @@ const imagesContainer = document.querySelector('.images');
 ///////////////////////////////////////
 
 const renderCountry = function(data, className = '') {
-
+    const [objCurrency] = Object.values(data.currencies)
     const html = `
     <article class="country ${className}">
         <img class="country__img" src="${data.flags.png}" />
@@ -16,11 +16,10 @@ const renderCountry = function(data, className = '') {
             <h4 class="country__region">${data.region}</h4>
             <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)} people</p>
             <p class="country__row"><span>🗣️</span>${Object.values(data.languages)}</p>
-            <p class="country__row"><span>💰</span>${Object.values(data.currencies)}</p>
+            <p class="country__row"><span>💰</span>${objCurrency.name}</p>
         </div>
     </article>
     `;
-    console.log(Object.values(data.currencies).name);
     countriesContainer.insertAdjacentHTML('beforeend', html);
     countriesContainer.style.opacity = 1;
 };
@@ -289,16 +288,31 @@ createImage(`./img/img-1.jpg`)
 
 */
 
+const getPosition = function() {
+  return new Promise (function(resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve,reject);
+  });
+};
+
+
 const whereAmI = async function(country) {
+    // Geolocation
+    const pos = await getPosition();
+    const{latitude: lat, longitude: lng} = pos.coords;
+
+    // Reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    const dataGeo = await resGeo.json()
+    console.log(dataGeo);
+    //Country data
     //fetch(`https://restcountries.com/v3.1/name/${country}`)
     //.then(res => console.log(res));
-
-    const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
+    const res = await fetch(`https://restcountries.com/v3.1/name/${dataGeo.country}`);
     const data = await res.json()
     console.log(data);
     renderCountry(data[0]);
 
 }
-whereAmI('colombia');
+whereAmI();
 console.log('FIRST')
 
