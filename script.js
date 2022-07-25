@@ -2,6 +2,7 @@
 
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
+const imagesContainer = document.querySelector('.images');
 
 ///////////////////////////////////////
 
@@ -26,7 +27,7 @@ const renderError = function(msg) {
     countriesContainer.insertAdjacentText('beforeend', msg);
     countriesContainer.style.opacity = 1;
 }
-/*
+
 const getCountryAndNeighbour = function(country) {
 
 // AJAX call country 1
@@ -62,7 +63,7 @@ request.addEventListener('load', function(){
     });
 };
 
-getCountryAndNeighbour('colombia');
+//getCountryAndNeighbour('colombia');
 
 // //Call back HELL
 // setTimeout(()=> {
@@ -77,10 +78,10 @@ getCountryAndNeighbour('colombia');
 //         }, 1000);
 //     }, 1000);
 // }, 1000);
-*/
+
 
 //
-/*
+
 const getJSON = function(url, errorMsg = 'Something went wrong') {
     return fetch(url).then(response =>  {
         if(!response.ok)
@@ -110,30 +111,30 @@ const getCountryData = function(country){
     })
 };
 
-btn.addEventListener('click', function(){
-    getCountryData('portugal');
+// btn.addEventListener('click', function(){
+//     getCountryData('portugal');
 
-})
-*/
+// })
+
 
 //getCountryData('australia');
 
 // Challenge # 1
 
-const whereAmI = function (lat, lng){
-    const prom = fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
-    .then (response => {
-        if(!response.ok)
-            throw new Error(`Error (${response.status}) you cann't call the API more than 3 times per second`);
-        return response.json()
-    })
-    .then(data => {
-        console.log(`You are in ${data.city} ,${data.country}`);
-        getCountryData(data.country);
-    })
-    .catch(err => console.log(`Algo ocurrio mal: ${err}`))
+// const whereAmI = function (lat, lng){
+//     const prom = fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then (response => {
+//         if(!response.ok)
+//             throw new Error(`Error (${response.status}) you cann't call the API more than 3 times per second`);
+//         return response.json()
+//     })
+//     .then(data => {
+//         console.log(`You are in ${data.city} ,${data.country}`);
+//         getCountryData(data.country);
+//     })
+//     .catch(err => console.log(`Algo ocurrio mal: ${err}`))
 
-}
+// }
 
 // https://geocode.xyz/51.50354,-0.12768?geoit=json
 // https://geocode.xyz/51.50354,-0.12768?geoit=json
@@ -167,18 +168,18 @@ const whereAmI = function (lat, lng){
 ////////////////////////////////////////
 
 
-const lotteryPromise = new Promise(function(resolve, reject) {
-    console.log('Lotter draw is happening WoW')
-    setTimeout(function() {
-        if(Math.random() >= 0.5) {
-            resolve('You WINN $$$');
-        }else {
-            reject(new Error('You lost your money :('));
-        }
-    }, 2000)
-});
+// const lotteryPromise = new Promise(function(resolve, reject) {
+//     console.log('Lotter draw is happening WoW')
+//     setTimeout(function() {
+//         if(Math.random() >= 0.5) {
+//             resolve('You WINN $$$');
+//         }else {
+//             reject(new Error('You lost your money :('));
+//         }
+//     }, 2000)
+// });
 
-lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
+// lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
 
 const wait = function(seconds) {
     return new Promise(function(resolve) {
@@ -187,28 +188,102 @@ const wait = function(seconds) {
 }
 
 // Replacement for callback hell
-wait(1)
-    .then(() => {
-    console.log('I waited for 1 seconds');
-    return wait(1);
-})
-    .then(() => {
-        console.log('I waited for 2 seconds');
-        return wait(1);
-})
-    .then(() => {
-        console.log('I waited for 3 seconds');
-        return wait(1);
-})
-    .then(() => {
-        console.log('I waited for 4 seconds');
-        return wait(1);
-})
-    .then(() => {
-        console.log('I waited for 5 seconds');
-        return wait(1);
-})
-.then(() => console.log('I waited for 6 second'))
+// wait(1)
+//     .then(() => {
+//     console.log('I waited for 1 seconds');
+//     return wait(1);
+// })
+//     .then(() => {
+//         console.log('I waited for 2 seconds');
+//         return wait(1);
+// })
+//     .then(() => {
+//         console.log('I waited for 3 seconds');
+//         return wait(1);
+// })
+//     .then(() => {
+//         console.log('I waited for 4 seconds');
+//         return wait(1);
+// })
+//     .then(() => {
+//         console.log('I waited for 5 seconds');
+//         return wait(1);
+// })
+// .then(() => console.log('I waited for 6 second'))
 
-Promise.resolve('abc').then(x=> console.log(x));
-Promise.reject(new Error('Problem!')).catch(x=> console.log(x));
+// Promise.resolve('abc').then(x=> console.log(x));
+// Promise.reject(new Error('Problem!')).catch(x=> console.log(x));
+
+
+
+// const getPosition = function() {
+//   return new Promise (function(resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //     position => resolve(position), 
+//     //     err => reject(err)
+//     // );
+//     navigator.geolocation.getCurrentPosition(resolve,reject);
+//   });
+// };
+
+// getPosition().then(pos => console.log(pos));
+
+
+// const whereAmI2 = function (){
+
+//     getPosition().then(pos => {
+//         const { latitude: lat, longitude: lng } = pos.coords
+//         return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     })
+//     .then (response => {
+//         if(!response.ok)
+//             throw new Error(`Error (${response.status}) you cann't call the API more than 3 times per second`);
+//         return response.json()
+//     })
+//     .then(data => {
+//         console.log(`You are in ${data.city} ,${data.country}`);
+//         getCountryData(data.country);
+//     })
+//     .catch(err => console.log(`Algo ocurrio mal: ${err}`))
+// }
+
+// btn.addEventListener('click',whereAmI2)
+
+
+const createImage = function(imgPath){
+    return new Promise (function(resolve, reject) {
+        const img = document.createElement('img');
+        img.src = imgPath;
+        img.addEventListener('load', ()=>{
+            imagesContainer.append(img);
+            resolve(img);
+        });
+        img.addEventListener('error', ()=>{
+            reject(new Error('Image not found'));
+        });
+    })
+}
+
+let currentImg;
+createImage(`./img/img-1.jpg`)
+  .then(img => {
+    currentImg = img;
+    console.log('Image 1 loaded');
+    return wait(2)
+})
+.then(()=>{
+    currentImg.style.display = 'none';
+    return createImage('./img/img-2.jpg');
+})
+.then(img => {
+    currentImg = img;
+    console.log('Image 2 loaded');
+    return wait(2)
+})
+.then(()=>{
+    currentImg.style.display = 'none';
+})
+.catch(err => console.error(err))
+
+
+
