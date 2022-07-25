@@ -303,31 +303,64 @@ const whereAmI = async function(country) {
 
         // Reverse geocoding
         const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-        if(!resGeo.ok) throw new Error(`Problem getting location data ********`)
-        const dataGeo = await resGeo.json()
-        console.log(dataGeo);
+        if(!resGeo.ok) throw new Error(`Problem getting location data ********`);
+        const dataGeo = await resGeo.json();
+
         //Country data
         //fetch(`https://restcountries.com/v3.1/name/${country}`)
         //.then(res => console.log(res));
         const res = await fetch(`https://restcountries.com/v3.1/name/${dataGeo.country}`);
-        if(!resGeo.ok) throw new Error(`Problem getting country data ********`)
-        const data = await res.json()
-        console.log(data);
-        renderCountry(data[0]);} catch(err){
-            console.error(err);
-            renderError(`{}{}{} ${err}`)
+        if(!resGeo.ok) throw new Error(`Problem getting country data ********`);
+        const data = await res.json();
+        renderCountry(data[0]);
+
+        return `You are in ${dataGeo.city}, ${dataGeo.country}`;
+
+    } catch(err){
+
+        console.error(err);
+        renderError(` ${err}`)
+
+        // Reject promise returned from async fuction
+        throw err;
     }
 
 };
-whereAmI();
-whereAmI();
-whereAmI();
-whereAmI();
-console.log('FIRST')
 
-try{
+// console.log('FIRST');
+// const city = whereAmI();
+// console.log(city);
 
-}catch{
+// whereAmI()
+//     .then(city => console.log(`2: ${city}`))
+//     .catch(err => console.error(`2: ${err.message} *`))
+//     .finally(()=> console.log(`3: Finished getting location`));
 
+// (async  function () {
+//     try {
+//         const city = await whereAmI();
+//         console.log(`2: ${city}`);
+//     } catch (err) {
+//         console.error(`2: ${err.message} *`);
+//     }
+//     console.log(`3: Finished getting location`);
+// })();
+
+
+const get3countries = async function(c1, c2, c3) {
+    try{
+        // const data1 = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+        // const data2 = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+        // const data3 = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+        const data = await Promise.all([
+            getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+            getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+            getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+        ]);
+        console.log(data.map(d => d[0].capital));
+    } catch (err) {
+        console.log(err);
+    }
 }
 
+get3countries('zambia', 'tanzania', 'mozambique')
