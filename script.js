@@ -15,11 +15,12 @@ const renderCountry = function(data, className = '') {
             <h3 class="country__name">${data.name.common}</h3>
             <h4 class="country__region">${data.region}</h4>
             <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)} people</p>
-            <p class="country__row"><span>🗣️</span>${data.languages}</p>
-            <p class="country__row"><span>💰</span>${data.currencies[0]}</p>
+            <p class="country__row"><span>🗣️</span>${Object.values(data.languages)}</p>
+            <p class="country__row"><span>💰</span>${Object.values(data.currencies)}</p>
         </div>
     </article>
     `;
+    console.log(Object.values(data.currencies).name);
     countriesContainer.insertAdjacentHTML('beforeend', html);
     countriesContainer.style.opacity = 1;
 };
@@ -249,7 +250,8 @@ const wait = function(seconds) {
 
 // btn.addEventListener('click',whereAmI2)
 
-
+// CHALLENGE #2
+/*
 const createImage = function(imgPath){
     return new Promise (function(resolve, reject) {
         const img = document.createElement('img');
@@ -285,5 +287,18 @@ createImage(`./img/img-1.jpg`)
 })
 .catch(err => console.error(err))
 
+*/
 
+const whereAmI = async function(country) {
+    //fetch(`https://restcountries.com/v3.1/name/${country}`)
+    //.then(res => console.log(res));
+
+    const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
+    const data = await res.json()
+    console.log(data);
+    renderCountry(data[0]);
+
+}
+whereAmI('colombia');
+console.log('FIRST')
 
