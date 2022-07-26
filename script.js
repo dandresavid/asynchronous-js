@@ -346,7 +346,7 @@ const whereAmI = async function(country) {
 //     console.log(`3: Finished getting location`);
 // })();
 
-
+/*
 const get3countries = async function(c1, c2, c3) {
     try{
         // const data1 = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
@@ -364,3 +364,51 @@ const get3countries = async function(c1, c2, c3) {
 }
 
 get3countries('zambia', 'tanzania', 'mozambique')
+*/
+
+// Promise.race short circuits whn one of the promises gets settle (Including rejected promises)
+(async function(){ 
+    const res = await Promise.race([
+        getJSON(`https://restcountries.com/v3.1/name/italy`),
+        getJSON(`https://restcountries.com/v3.1/name/mexico`),
+        getJSON(`https://restcountries.com/v3.1/name/egypt`),
+    ]);
+})
+
+const timeout = function(sec) {
+    return new Promise (function(_, reject) {
+        setTimeout(function(){
+            reject (new Error('Request took too long'));
+        }, sec * 1000);
+    });
+};
+
+Promise.race([
+    getJSON(`https://restcountries.com/v3.1/name/mexico`),
+    timeout(1),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.log(err))
+
+  //Promise.allSettled
+Promise.allSettled([
+    Promise.resolve('Success'),
+    Promise.reject('Error'),
+    Promise.resolve('Another success')
+]).then(res => console.log(res));
+
+Promise.all([
+    Promise.resolve('Success'),
+    Promise.reject('Error'),
+    Promise.resolve('Another success')
+]).then(res => console.log(res))
+  .catch(err => console.error(err));
+
+// Promise.any [ES2021]
+  Promise.any([
+    Promise.resolve('Success'),
+    Promise.reject('Error'),
+    Promise.resolve('Another success')
+]).then(res => console.log(res))
+  .catch(err => console.error(err));
+
