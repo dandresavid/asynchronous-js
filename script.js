@@ -367,48 +367,103 @@ get3countries('zambia', 'tanzania', 'mozambique')
 */
 
 // Promise.race short circuits whn one of the promises gets settle (Including rejected promises)
-(async function(){ 
-    const res = await Promise.race([
-        getJSON(`https://restcountries.com/v3.1/name/italy`),
-        getJSON(`https://restcountries.com/v3.1/name/mexico`),
-        getJSON(`https://restcountries.com/v3.1/name/egypt`),
-    ]);
-})
+// (async function(){ 
+//     const res = await Promise.race([
+//         getJSON(`https://restcountries.com/v3.1/name/italy`),
+//         getJSON(`https://restcountries.com/v3.1/name/mexico`),
+//         getJSON(`https://restcountries.com/v3.1/name/egypt`),
+//     ]);
+// })
 
-const timeout = function(sec) {
-    return new Promise (function(_, reject) {
-        setTimeout(function(){
-            reject (new Error('Request took too long'));
-        }, sec * 1000);
-    });
-};
+// const timeout = function(sec) {
+//     return new Promise (function(_, reject) {
+//         setTimeout(function(){
+//             reject (new Error('Request took too long'));
+//         }, sec * 1000);
+//     });
+// };
 
-Promise.race([
-    getJSON(`https://restcountries.com/v3.1/name/mexico`),
-    timeout(1),
-])
-  .then(res => console.log(res[0]))
-  .catch(err => console.log(err))
+// Promise.race([
+//     getJSON(`https://restcountries.com/v3.1/name/mexico`),
+//     timeout(1),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.log(err))
 
   //Promise.allSettled
-Promise.allSettled([
-    Promise.resolve('Success'),
-    Promise.reject('Error'),
-    Promise.resolve('Another success')
-]).then(res => console.log(res));
+// Promise.allSettled([
+//     Promise.resolve('Success'),
+//     Promise.reject('Error'),
+//     Promise.resolve('Another success')
+// ]).then(res => console.log(res));
 
-Promise.all([
-    Promise.resolve('Success'),
-    Promise.reject('Error'),
-    Promise.resolve('Another success')
-]).then(res => console.log(res))
-  .catch(err => console.error(err));
+// Promise.all([
+//     Promise.resolve('Success'),
+//     Promise.reject('Error'),
+//     Promise.resolve('Another success')
+// ]).then(res => console.log(res))
+//   .catch(err => console.error(err));
 
 // Promise.any [ES2021]
-  Promise.any([
-    Promise.resolve('Success'),
-    Promise.reject('Error'),
-    Promise.resolve('Another success')
-]).then(res => console.log(res))
-  .catch(err => console.error(err));
+//   Promise.any([
+//     Promise.resolve('Success'),
+//     Promise.reject('Error'),
+//     Promise.resolve('Another success')
+// ]).then(res => console.log(res))
+//   .catch(err => console.error(err));
 
+
+// Challenge 3
+
+const createImage = function(imgPath){
+    return new Promise (function(resolve, reject) {
+        const img = document.createElement('img');
+        img.src = imgPath;
+        img.addEventListener('load', ()=>{
+            imagesContainer.append(img);
+            resolve(img);
+        });
+        img.addEventListener('error', ()=>{
+            reject(new Error('Image not found'));
+        });
+    })
+}
+
+let currentImg;
+/*
+
+// const loadNPause = async function () {
+//     try{
+//         let img = await createImage(`./img/img-1.jpg`);
+//         currentImg = img;
+//         await wait(2);
+//         img.style.display = 'none';
+//         img = await createImage(`./img/img-2.jpg`);
+//         await wait(2)
+//         img.style.display = 'none';
+//     } catch (err) {
+//         console.log(err);
+//     }
+
+// }
+*/
+
+//loadNPause();
+
+const imgArr = ['./img/img-1.jpg', './img/img-2.jpg', './img/img-3.jpg', './img/img-1.jpg'];
+
+const loadAll = async function (imgArr) {
+    try{
+        const imgs = imgArr.map(async img => 
+            await createImage(img));
+        console.log(imgs);
+        const imgEl = await Promise.all(imgs);
+        console.log(imgEl);
+        imgEl.forEach(img => img.classList.add('parallel'));
+    } catch (err) {
+        console.log(err);
+    }
+}
+loadAll(imgArr)
+
+//imagesContainer.classList()
